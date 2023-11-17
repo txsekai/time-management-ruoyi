@@ -1,0 +1,237 @@
+.el-container {
+  flex-direction: column;
+}
+
+.section-main {
+  padding: 2.4rem 0;
+  height: calc(100vh - 6.4rem);
+}
+
+.container {
+  padding: 0 3.6rem;
+  margin: 0 auto;
+  height: 100%;
+}
+
+.el-dropdown-menu__item:focus, .el-dropdown-menu__item:not(.is-disabled):hover {
+  background-color: #fdf2e9;
+  color: #cf711f;
+}
+
+.card {
+  border-radius: 11px;
+  overflow: auto;
+}
+
+.el-table,
+.el-picker-panel__shortcut,
+.el-date-picker__header-label{
+  font-size: 1.4rem;
+}
+
+.el-picker-panel {
+  border-radius: 11px;
+  line-height: 0.8rem;
+}
+
+.el-date-picker__header-label.active, .el-date-picker__header-label:hover,
+.el-picker-panel__icon-btn:hover,
+.el-date-table td.available:hover,
+.el-year-table td .cell:hover, .el-year-table td.current:not(.disabled) .cell,
+.el-month-table td .cell:hover,
+.el-month-table td.current:not(.disabled) .cell,
+.el-date-table td.today span,
+.el-picker-panel__shortcut:hover{
+  color: #cf711f;
+}
+
+.el-input.is-active .el-input__inner, .el-input__inner:focus {
+  border-color: #cf711f;
+}
+
+.el-date-table td.current:not(.disabled) span {
+  background-color: #cf711f;;
+}
+
+.el-calendar__title {
+  color: #cf711f;
+}
+
+.el-button:focus, .el-button:hover {
+  border-color: #e67e22;
+  background-color: #fdf2e9;
+  color: #cf711f;
+  cursor: pointer;
+}
+
+.el-button:active {
+  border-color: #e67e22;
+  color: #cf711f;
+}
+
+.el-button--primary {
+  border-color: #e67e22;
+  background-color: #fdf2e9;
+  color: #cf711f;
+}
+
+.el-calendar-table .el-calendar-day:hover,
+.el-calendar-table td.is-selected {
+  background-color: #fdf2e9;
+}
+
+.el-backtop, .el-calendar-table td.is-today {
+  color: #cf711f;
+}
+
+/* 修改滚动条的样式 */
+::-webkit-scrollbar,
+.el-scrollbar__bar.is-vertical{
+  width: 0.4rem; /* 设置滚动条宽度 */
+}
+
+/* 修改滚动条轨道的样式 */
+::-webkit-scrollbar-track {
+  /*background-color: #fdf2e9; !* 设置滚动条轨道的背景颜色 *!*/
+}
+
+/* 修改滚动条滑块的样式 */
+::-webkit-scrollbar-thumb,
+.el-scrollbar__thumb{
+  background-color: #f3cba7; /* 设置滚动条滑块的背景颜色 */
+  border-radius: 7rem;
+}
+
+/* 修改滚动条滑块悬停时的样式 */
+::-webkit-scrollbar-thumb:hover,
+.el-scrollbar__thumb:hover {
+  background-color: #f8b983; /* 设置滚动条滑块悬停时的背景颜色 */
+}
+
+.el-tooltip__popper.is-dark {
+  background-color: #fdf2e9;
+  color: #cf711f;
+}
+
+.el-tooltip__popper {
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 0.8rem;
+}
+
+.el-tooltip__popper[x-placement^=bottom] {
+  margin-top: 0.7rem;
+}
+
+.el-tooltip__popper[x-placement^=bottom] .popper__arrow::after,
+.el-tooltip__popper[x-placement^=bottom] .popper__arrow {
+  border-bottom-color:  #fdf2e9;
+}
+
+.el-tag {
+  border-color: #e67e22;
+  background-color: #fdf2e9;
+  color: #cf711f;
+}
+
+.el-tag .el-tag__close {
+  color: #cf711f;
+}
+
+.el-tag .el-tag__close:hover {
+  background-color: #fdf2e9;
+  color: #cf711f;
+}
+
+.button-padding {
+  padding: 0.9rem 1.6rem;
+}
+
+.mt3 {
+  margin-top: 0.3rem;
+}
+
+.mt6 {
+  margin-top: 0.6rem;
+}
+
+.mt8 {
+  margin-top: 0.8rem;
+}
+
+.mt12 {
+  margin-top: 1.2rem;
+}
+
+.mt16 {
+  margin-top: 1.6rem;
+}
+
+.mt24 {
+  margin-top: 2.4rem;
+}
+
+.mt36 {
+  margin-top: 3.6rem;
+}
+
+.el-range-editor.is-active, .el-range-editor.is-active:hover, .el-select .el-input.is-focus .el-input__inner,
+.el-select .el-input__inner:focus{
+  border-color: #cf711f;
+}
+
+.el-select-dropdown__item.selected {
+  color: #cf711f;
+}
+
+.el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
+  background-color: #fdf2e9;
+}
+
+.has-sidebar {
+  overflow: hidden;
+}
+
+.el-date-picker {
+  width: 26rem;
+}
+
+.el-date-editor /deep/ .el-popper[x-placement^=bottom] {
+  margin-top: 0.9rem;
+}
+
+.el-date-picker.has-sidebar {
+  width: 33.8rem;
+}
+
+.el-picker-panel [slot=sidebar], .el-picker-panel__sidebar {
+  width: 6rem;
+}
+
+.el-picker-panel [slot=sidebar]+.el-picker-panel__body, .el-picker-panel__sidebar+.el-picker-panel__body {
+  margin-left: 6rem;
+}
+
+.el-date-picker__header {
+  margin: 0.7rem;
+}
+
+.el-date-picker .el-picker-panel__content {
+  width: 24.2rem;
+}
+
+.el-picker-panel__content {
+  margin: 1rem;
+}
+
+.el-scrollbar .el-scrollbar__wrap {
+  margin-bottom: -1.2rem !important;
+}
+
+.dialog-footer {
+  text-align: right;
+}
+
+.user-select-none {
+  user-select: none;
+}
