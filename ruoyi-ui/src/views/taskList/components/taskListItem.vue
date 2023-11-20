@@ -43,6 +43,10 @@
                              @click="openDateAndTimeDialog(task)"></el-button>
                 </el-tooltip>
 
+                <el-tooltip content="开始专注" placement="bottom-start">
+                  <el-button class="setting-icon" icon="el-icon-timer"></el-button>
+                </el-tooltip>
+
                 <el-dropdown @command="handlePriorityCommand(task, $event)" class="priority-style">
                   <el-tooltip content="优先级" placement="bottom-start">
                     <el-button class="setting-icon" icon="el-icon-star-on"></el-button>
@@ -88,7 +92,7 @@ import DateMixin from "../../../mixins/formatDate";
 import RepeatMixin from "../../../mixins/formatRepeat";
 
 export default {
-  name: 'TaskList',
+  name: 'TaskListItem',
   components: {DateAndTimeDialog, TagDialog},
   mixins: [DateMixin, RepeatMixin],
 
