@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.taskList.mapper.TaskListMapper">
+
+    <resultMap id="TaskListResult" type="TaskList">
+        <id property="taskId" column="task_id"/>
+        <result property="taskName" column="task_name"/>
+        <result property="taskStatus" column="task_status"/>
+        <result property="taskStartTime" column="task_start_time"/>
+        <result property="taskCompletedTime" column="task_completed_time"/>
+        <result property="taskRepeatId" column="task_repeat_id"/>
+        <result property="taskPriority" column="task_priority"/>
+        <result property="createBy"   column="create_by"   />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy"   column="update_by"   />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+        <result property="userId" column="user_id" />
+        <association property="repeat" javaType="TaskRepeat" resultMap="RepeatResult" />
+        <collection property="tags" javaType="java.util.List" resultMap="TaskTagsResult" />
+    </resultMap>
+
+    <resultMap id="RepeatResult" type="TaskRepeat">
+        <id property="taskRepeatId" column="task_repeat_id" />
+        <result property="repeatValue" column="repeat_value" />
+        <result property="endRepeat" column="end_repeat" />
+        <result property="endRepeatDate" column="end_repeat_date" />
+        <result property="customNum" column="custom_num" />
+        <result property="repeatFrequencyValue" column="repeat_frequency_value" />
+        <result property="repeatSelectedItem" column="repeat_selected_item" />
+    </resultMap>
+
+    <resultMap id="TaskTagsResult" type="TaskTags">
+        <result property="tagId" column="tag_id"/>
+        <association property="tagName" javaType="Tag" resultMap="TagNameResult"/>
+    </resultMap>
+
+    <resultMap id="TagNameResult" type="Tag">
+        <result property="tagName" column="tag_name"/>
+    </resultMap>
+
+    <sql id="selectTaskListVo">
+        select tl.task_id, tl.task_name, tl.task_status, tl.task_start_time, tl.task_completed_time, tl.task_whether_repeat,
+               tl.task_priority, t.tag_name, tr.repeat_value, tr.end_repeat, tr.end_repeat_date, tr.custom_num, tr.repeat_frequency_value, tr.repeat_selected_item
+        from task_list tl
+        left join task_tags tt on tl.task_id = tt.task_id
+        left join tag t on tt.tag_id = t.tag_id
+        left join task_repeat tr on tl.task_repeat_id = tr.task_repeat_id
+    </sql>
+
+    <select id="selectTodoList" parameterType="TaskList" resultMap="TaskListResult">
+        <include refid="selectTaskListVo" />
+        where tl.task_status = 0
+        <if test="taskName != null and taskName != ''" ></if>
+            and tl.task_name like concat('%', #{taskName}, '%')
+        <if test="tagName != null and tagName != ''"></if>
+            and t.tag_name like concat('%', #{tagName}, '%')
+        <if test="taskPriority !=null and taskPriority != ''"></if>
+            and tl.task_priority = #{taskPriority}
+    </select>
+</mapper>

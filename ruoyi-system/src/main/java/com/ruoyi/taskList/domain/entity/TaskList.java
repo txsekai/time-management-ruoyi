@@ -1,4 +1,4 @@
-package com.ruoyi.taskList.domain;
+package com.ruoyi.taskList.domain.entity;
 
 import com.ruoyi.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class TaskList extends BaseEntity {
     private static final long serialVersionUID = 1L;
@@ -22,11 +23,15 @@ public class TaskList extends BaseEntity {
 
     private LocalDateTime taskCompletedTime;
 
-    private Integer taskWhetherRepeat;
+    private Long taskRepeatId;
 
     private Integer taskPriority;
 
     private Long userId;
+
+    private TaskRepeat repeat;
+
+    private List<Tag> tags;
 
     public Long getTaskId() { return taskId; }
 
@@ -50,9 +55,9 @@ public class TaskList extends BaseEntity {
 
     public void setTaskCompletedTime(LocalDateTime taskCompletedTime) { this.taskCompletedTime = taskCompletedTime; }
 
-    public Integer getTaskWhetherRepeat() { return taskWhetherRepeat; }
+    public Long getTaskRepeatId() { return taskRepeatId; }
 
-    public void setTaskWhetherRepeat(Integer taskWhetherRepeat) { this.taskWhetherRepeat = taskWhetherRepeat; }
+    public void setTaskRepeatId(Long taskRepeatId) { this.taskRepeatId = taskRepeatId; }
 
     public Integer getTaskPriority() { return taskPriority; }
 
@@ -62,6 +67,14 @@ public class TaskList extends BaseEntity {
 
     public void setUserId(Long userId) { this.userId = userId; }
 
+    public TaskRepeat getRepeat() { return repeat; }
+
+    public void setRepeat(TaskRepeat repeat) { this.repeat = repeat; }
+
+    public List<Tag> getTags() { return tags; }
+
+    public void setTags(List<Tag> tags) { this.tags = tags; }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -70,9 +83,11 @@ public class TaskList extends BaseEntity {
                 .append("taskStatus", getTaskStatus())
                 .append("taskStartTime", getTaskStartTime())
                 .append("taskCompletedTime", getTaskCompletedTime())
-                .append("taskWhetherRepeat", getTaskWhetherRepeat())
+                .append("taskRepeatId", getTaskRepeatId())
                 .append("taskPriority", getTaskPriority())
                 .append("userId", getUserId())
+                .append("repeat", getRepeat())
+                .append("tags", getTags())
                 .toString();
     }
 }

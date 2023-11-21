@@ -100,7 +100,7 @@ export default {
     return {
       taskList: [{
         complete: false,
-        content: '123',
+        content: '',
         editing: false,
         tags: [],
         dateAndTime: {startTime: null, completedTime: null},

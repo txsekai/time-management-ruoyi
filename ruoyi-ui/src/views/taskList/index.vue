@@ -15,10 +15,10 @@
               @keyup.enter.native="handleQuery"
             ></el-input>
           </el-form-item>
-          <el-form-item label="任务标签">
+          <el-form-item label="标签名称">
             <el-input
               v-model="queryParams.taskTag"
-              placeholder="请输入任务标签"
+              placeholder="请输入标签名称"
               clearable
               style="width: 240px"
               @keyup.enter.native="handleQuery"
@@ -87,12 +87,12 @@ export default {
       listToDoTask(this.queryParams).then(res => {
         this.todoList = res
       })
-      listDoingTask(this.queryParams).then(res => {
-        this.doneList = res
-      })
-      listDoneTask(this.queryParams).then(res => {
-        this.doneList = res
-      })
+      // listDoingTask(this.queryParams).then(res => {
+      //   this.doneList = res
+      // })
+      // listDoneTask(this.queryParams).then(res => {
+      //   this.doneList = res
+      // })
     },
     handleQuery(){
       this.getList();
