@@ -22,20 +22,16 @@
 
     <select id="checkTagNameUnique" parameterType="java.util.List" resultMap="TagListResult">
         select tag_id, tag_name from tag where tag_name in
-        <foreach item="item" collection="tagName" open="(" separator="," close=")">
-            #{tagName}
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
         </foreach>
     </select>
 
     <insert id="insertTag" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="tagId">
-        insert into tag(
-            tag_name,
-            create_time
-        )values
+            insert into tag (tag_name)
+            values
         <foreach collection="list" item="tagName" separator=",">
-             <bind name="currentDate" value="sysdate()" />
-            (#{tagName},
-             #{currentDate})
+                (#{tagName})
         </foreach>
     </insert>
 </mapper>
