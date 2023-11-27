@@ -2,16 +2,16 @@
   <div>
     <el-row v-for="(task, index) in taskList" :key="index">
       <div class="task">
-        <input style="margin: 0.2rem" type="checkbox" v-model="task.complete"/>
+        <input style="margin: 0.2rem" type="checkbox" v-model="task.taskStatus"/>
         <div class="task-detail">
           <template v-if="!task.editing">
             <!--                        TODO 整个task的内容应该都可以点击-->
-            <div class="edit-task" @click="startEditing(task, index)">{{ task.content }}</div>
+            <div class="edit-task" @click="startEditing(task, index)">{{ task.taskName }}</div>
             <el-row class="tag-row">
               <el-tag class="tag-group"
                       v-for="tag in task.tags"
-                      :key="tag"
-              >{{ tag }}
+                      :key="tag.tagId"
+              >{{ tag.tagName }}
               </el-tag>
             </el-row>
             <el-row v-if="task.dateAndTime.startTime">
@@ -22,7 +22,7 @@
                 }}</span>
             </el-row>
 
-            <el-row v-html="formattedRepeatResult(task.localRepeatResult)"></el-row>
+            <el-row v-html="formattedRepeatResult(task.repeat)"></el-row>
 
             <el-row v-if="task.selectedPriority!==''">
               <i v-for="starCount in task.selectedPriority" :key="starCount" class="el-icon-star-on"></i>
@@ -30,7 +30,7 @@
           </template>
           <template v-else>
             <div class="input-and-settings">
-              <el-input :id="'task_input_' + index" v-model="task.content" ref="taskInputs"
+              <el-input :id="'task_input_' + index" v-model="task.taskName" ref="taskInputs"
                         @blur="inputBlur(task, index)"
                         @keyup.native="handleShowSettings(task)"></el-input>
               <el-row v-if="showSettings" style="display: flex;align-items: center;">
@@ -80,7 +80,6 @@
                           @delete="dateAndTimeDialogVisible=false"
     ></date-and-time-dialog>
 
-
   </div>
 </template>
 
@@ -96,23 +95,29 @@ export default {
   components: {DateAndTimeDialog, TagDialog},
   mixins: [DateMixin, RepeatMixin],
 
+  props: {
+    todoList: {
+      type: Array,
+    },
+  },
+
   data() {
     return {
       taskList: [{
-        complete: false,
-        content: '',
+        taskStatus: 0,
+        taskName: '',
         editing: false,
         tags: [],
         dateAndTime: {startTime: null, completedTime: null},
         selectedPriority: '',
-        localRepeatResult: {repeatValue: null, endRepeat: null, endRepeatDate: null, customResult: {}}
+        repeat: {repeatValue: null, endRepeat: null, endRepeatDate: null, customResult: {}}
       }],
       tagDialogVisible: false,
       currentTask: {
-        content: '',
+        taskName: '',
         tags: [],
         dateAndTime: {startTime: null, completedTime: null},
-        localRepeatResult: {repeatValue: null, endRepeat: null, endRepeatDate: null, customResult: {}}
+        repeat: {repeatValue: null, endRepeat: null, endRepeatDate: null, customResult: {}}
       },
       tagsBk: [],
 
@@ -134,22 +139,37 @@ export default {
     }
   },
 
+  watch: {
+    todoList(val) {
+      for (let row of val) {
+        row.dateAndTime = {startTime: row.taskStartTime, completedTime: row.taskCompletedTime};
+        if (row.tags.length > 0) {
+          row.tags = row.tags.map((tagRow)=>{
+            return{tagId: tagRow.tagId, tagName: tagRow.tagData.tagName}
+          })
+          row.repeat.customResult = {num: row.repeat.num,  frequencyValue: row.repeat.frequencyValue, selectedItem: row.repeat.selectedItem}
+        }
+      }
+      this.taskList = val;
+    }
+  },
+
   computed: {
     showSettings() {
-      return this.currentTask.content.length !== 0
+      return this.currentTask.taskName.length !== 0
     }
   },
 
   methods: {
     addTask() {
       const newTask = {
-        complete: false,
-        content: '',
+        taskStatus: 0,
+        taskName: '',
         editing: true,
         tags: [],
         dateAndTime: {startTime: null, completedTime: null},
         selectedPriority: '',
-        localRepeatResult: {repeatValue: null, endRepeat: null, endRepeatDate: null, customResult: {}}
+        repeat: {repeatValue: null, endRepeat: null, endRepeatDate: null, customResult: {}}
       }
       this.taskList.push(newTask);
       this.currentTask = newTask
@@ -171,7 +191,7 @@ export default {
       });
     },
     inputBlur(task, index) {
-      if (task.content === '' || task.content === undefined) {
+      if (task.taskName === '' || task.taskName === undefined) {
         this.taskList.splice(index, 1)
       } else {
         setTimeout(() => {

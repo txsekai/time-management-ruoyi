@@ -17,11 +17,11 @@ public class TaskRepeat extends BaseEntity {
 
     private LocalDateTime endRepeatDate;
 
-    private Integer customNum;
+    private Integer num;
 
-    private String repeatFrequencyValue;
+    private String frequencyValue;
 
-    private String repeatSelectedItem;
+    private String selectedItem;
 
     public String getRepeatValue() { return repeatValue; }
 
@@ -35,17 +35,17 @@ public class TaskRepeat extends BaseEntity {
 
     public void setEndRepeatDate(LocalDateTime endRepeatDate) { this.endRepeatDate = endRepeatDate; }
 
-    public Integer getCustomNum() { return customNum; }
+    public Integer getNum() { return num; }
 
-    public void setCustomNum(Integer customNum) { this.customNum = customNum; }
+    public void setNum(Integer num) { this.num = num; }
 
-    public String getRepeatFrequencyValue() { return repeatFrequencyValue; }
+    public String getFrequencyValue() { return frequencyValue; }
 
-    public void setRepeatFrequencyValue(String repeatFrequencyValue) { this.repeatFrequencyValue = repeatFrequencyValue; }
+    public void setFrequencyValue(String frequencyValue) { this.frequencyValue = frequencyValue; }
 
-    public String getRepeatSelectedItem() { return repeatSelectedItem; }
+    public String getSelectedItem() { return selectedItem; }
 
-    public void setRepeatSelectedItem(String repeatSelectedItem) { this.repeatSelectedItem = repeatSelectedItem; }
+    public void setSelectedItem(String selectedItem) { this.selectedItem = selectedItem; }
 
     public Long getTaskRepeatId() { return taskRepeatId; }
 
@@ -57,9 +57,9 @@ public class TaskRepeat extends BaseEntity {
                 .append("repeatValue", getRepeatValue())
                 .append("endRepeat" , getEndRepeat())
                 .append("endRepeatDate", getEndRepeatDate())
-                .append("customNum", getCustomNum())
-                .append("repeatFrequencyValue", getRepeatFrequencyValue())
-                .append("repeatSelectedItem", getRepeatSelectedItem())
+                .append("num", getNum())
+                .append("frequencyValue", getFrequencyValue())
+                .append("selectedItem", getSelectedItem())
                 .append("taskId", getTaskRepeatId())
                 .toString();
     }

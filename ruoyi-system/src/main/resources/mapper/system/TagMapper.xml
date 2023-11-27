@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.taskList.mapper.TagMapper">
+
+    <resultMap id="TagListResult" type="com.ruoyi.taskList.domain.entity.Tag">
+        <id property="tagId" column="tag_id" />
+        <result property="tagName" column="tag_name" />
+    </resultMap>
+
+    <sql id="selectTagListVo">
+        select t.tag_id,
+               t.tag_name
+        from tag t
+    </sql>
+
+    <select id="selectTagList" resultMap="TagListResult">
+        <include refid="selectTagListVo"></include>
+        order by t.tag_id
+    </select>
+
+    <select id="checkTagNameUnique" parameterType="java.util.List" resultMap="TagListResult">
+        select tag_id, tag_name from tag where tag_name in
+        <foreach item="item" collection="tagName" open="(" separator="," close=")">
+            #{tagName}
+        </foreach>
+    </select>
+
+    <insert id="insertTag" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="tagId">
+        insert into tag(
+            tag_name,
+            create_time
+        )values
+        <foreach collection="list" item="tagName" separator=",">
+             <bind name="currentDate" value="sysdate()" />
+            (#{tagName},
+             #{currentDate})
+        </foreach>
+    </insert>
+</mapper>

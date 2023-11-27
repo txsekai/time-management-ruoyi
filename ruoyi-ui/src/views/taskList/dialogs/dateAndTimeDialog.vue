@@ -91,7 +91,7 @@
 
     <el-row class="mt24">
       <el-button @click="handleOpenRepeatDialog">重复</el-button>
-      <el-row class="mt8" v-html="formattedRepeatResult(localRepeatResult)"></el-row>
+      <el-row class="mt8" v-html="formattedRepeatResult(repeat)"></el-row>
     </el-row>
 
     <div slot="footer" class="dialog-footer">
@@ -105,7 +105,7 @@
     <repeat-dialog :repeat-dialog-visible="repeatDialogVisible" @repeatConfirm="handleRepeatConfirm"
                    @repeatCancel="repeatDialogVisible=false"
                    :title="repeatDialogTitle"
-                   :repeat-result="localRepeatResult"
+                   :repeat-result="repeat"
     ></repeat-dialog>
   </el-dialog>
 </template>
@@ -133,7 +133,7 @@ export default {
       default: function () {
         return {
           dateAndTime: {startTime: null, completedTime: null},
-          localRepeatResult: {repeatValue: null, endRepeat: null, endRepeatDate: null, customResult: {}}
+          repeat: {repeatValue: null, endRepeat: null, endRepeatDate: null, customResult: {}}
         }
       }
     },
@@ -180,7 +180,7 @@ export default {
       },
 
       repeatDialogVisible: false,
-      localRepeatResult: {repeatValue: null, endRepeat: null, endRepeatDate: null, customResult: {}}
+      repeat: {repeatValue: null, endRepeat: null, endRepeatDate: null, customResult: {}}
     }
   },
 
@@ -222,7 +222,7 @@ export default {
           }
         }
 
-        this.localRepeatResult = newTask.localRepeatResult
+        this.repeat = newTask.repeat
       },
       deep: true
     },
@@ -374,8 +374,8 @@ export default {
         this.task.dateAndTime.startTime = this.startTime;
         this.task.dateAndTime.completedTime = this.completedTimeVisible || this.completedDateVisible ? this.completedTime : null;
         // TODO deep clone customResult
-        this.task.localRepeatResult = JSON.parse(JSON.stringify(this.localRepeatResult))
-        console.log(this.task.localRepeatResult === this.localRepeatResult)
+        this.task.repeat = JSON.parse(JSON.stringify(this.repeat))
+        console.log(this.task.repeat === this.repeat)
         this.$emit("dateConfirm")
       }
     },
@@ -405,11 +405,11 @@ export default {
         this.repeatDialogVisible = false
       }
     },
-    handleRepeatConfirm(localRepeatResult) {
+    handleRepeatConfirm(repeat) {
       this.repeatDialogVisible = false
-      this.labelFormatHolder.selectedRepeatList = localRepeatResult.customResult.selectedItem
-      this.labelFormatHolder.frequencyValue = localRepeatResult.customResult.frequencyValue
-      this.localRepeatResult = localRepeatResult
+      this.labelFormatHolder.selectedRepeatList = repeat.customResult.selectedItem
+      this.labelFormatHolder.frequencyValue = repeat.customResult.frequencyValue
+      this.repeat = repeat
     },
   },
 }

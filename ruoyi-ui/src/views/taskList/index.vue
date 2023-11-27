@@ -17,13 +17,14 @@
           </el-form-item>
           <el-form-item label="标签名称">
             <el-input
-              v-model="queryParams.taskTag"
+              v-model="queryParams.tagName"
               placeholder="请输入标签名称"
               clearable
               style="width: 240px"
               @keyup.enter.native="handleQuery"
             ></el-input>
           </el-form-item>
+<!--          TODO 优先级做成下拉框-->
           <el-form-item label="任务优先级">
             <el-input
               v-model="queryParams.taskPriority"
@@ -42,7 +43,7 @@
           <el-card class="card">
             <div class="list-title">TO DO</div>
             <div class="list-details">
-              <task-list-item />
+              <task-list-item :todo-list="todoList"/>
             </div>
           </el-card>
 
@@ -69,10 +70,10 @@ export default {
     return {
       queryParams: {
         taskName: "",
-        taskTag: "",
-        taskPriority: null
+        tagName: "",
+        taskPriority: 0
       },
-      todoList: {},
+      todoList: [],
       doingList: {},
       doneList: {},
     }
@@ -85,7 +86,7 @@ export default {
   methods: {
     getList() {
       listToDoTask(this.queryParams).then(res => {
-        this.todoList = res
+        this.todoList = res.data
       })
       // listDoingTask(this.queryParams).then(res => {
       //   this.doneList = res

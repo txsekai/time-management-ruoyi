@@ -135,12 +135,12 @@ export default {
       // },
 
       customResult: {num: null, frequencyValue: null, selectedItem: null},
-      localRepeatResult: {repeatValue: null, endRepeat: null, endRepeatDate: null, customResult: {}}
+      repeat: {repeatValue: null, endRepeat: null, endRepeatDate: null, customResult: {}}
     }
   },
 
   created() {
-    this.localRepeatResult = this.repeatResult
+    this.repeat = this.repeatResult
 
     this.initLocalVariables(this.repeatResult)
   },
@@ -153,7 +153,7 @@ export default {
 
   watch: {
     repeatResult(val) {
-      this.localRepeatResult = val
+      this.repeat = val
 
       this.initLocalVariables(val)
     },
@@ -205,8 +205,8 @@ export default {
     },
     handleConfirm() {
       const {repeatValue, endRepeat, endRepeatDate, customResult} = this
-      this.localRepeatResult = {repeatValue, endRepeat, endRepeatDate, customResult}
-      this.$emit("repeatConfirm", this.localRepeatResult)
+      this.repeat = {repeatValue, endRepeat, endRepeatDate, customResult}
+      this.$emit("repeatConfirm", this.repeat)
     },
     handleRepeatCancel() {
       this.$emit("repeatCancel")

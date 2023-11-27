@@ -11,13 +11,13 @@
     <el-row>
       <el-tag
         class="button-tag"
-        :key="tag"
+        :key="tag.tagId"
         v-for="tag in dynamicTags"
         closable
-        @close="handleCloseTag(tag)"
-        @click="handleSelectOrCancelTag(tag)"
-        :class="{selected: isSelected(tag)}"
-      >{{ tag }}
+        @close="handleCloseTag(tag.tagId)"
+        @click="handleSelectOrCancelTag(tag.tagId)"
+        :class="{selected: isSelected(tag.tagId)}"
+      >{{ tag.tagName }}
       </el-tag>
       <el-input
         class="input-new-tag"
@@ -39,6 +39,9 @@
 </template>
 
 <script>
+import {addTag, listTags} from "../../../api/taskList/tag";
+import { v4 as uuidv4 } from 'uuid';
+
 export default {
   name: 'TagDialog',
 
@@ -62,10 +65,15 @@ export default {
   },
   data() {
     return {
-      dynamicTags: ['写作业', '工作', '整理笔记', '阅读', '运动', '弹吉他'],
+      dynamicTags: [],
       inputVisible: false,
-      inputValue: '',
+      inputValue: [],
+      tempTags: [],
     }
+  },
+
+  created() {
+    this.initTagList();
   },
 
   computed: {
@@ -75,6 +83,11 @@ export default {
   },
 
   methods: {
+    initTagList() {
+      listTags().then(res => {
+        this.dynamicTags = res.data.map(item => ({ tagId: item.tagId, tagName: item.tagName }));
+      })
+    },
     handleCloseTag(tag) {
       this.$confirm("确认要删除标签吗？", "确认", {
         confirmButtonText: "确认",
@@ -112,16 +125,25 @@ export default {
         this.task.tags.splice(index, 1)
       }
     },
+    generateUniqueId() {
+      return uuidv4();
+    },
     handleInputConfirm() {
       const inputValue = this.inputValue
       if (inputValue) {
-        if(this.dynamicTags.includes(inputValue)){
+        if(this.dynamicTags.some(tag => tag.tagName === inputValue)){
           this.$message({
             message: '标签已经存在',
             type: 'warning'
           })
         }else {
-          this.dynamicTags.push(inputValue)
+          // 临时加到dynamicTags里面
+          const newTag = {
+            tagId: this.generateUniqueId(),
+            tagName: inputValue
+          }
+          this.dynamicTags.push(newTag);
+          this.tempTags.push(inputValue)
         }
       }
       this.inputVisible = false
@@ -134,6 +156,9 @@ export default {
       })
     },
     handleConfirm() {
+      addTag(this.tempTags).then(res => {
+        this.$modal.msgSuccess("新增标签成功")
+      })
       this.$emit("tagConfirm")
     },
     handleClose() {
