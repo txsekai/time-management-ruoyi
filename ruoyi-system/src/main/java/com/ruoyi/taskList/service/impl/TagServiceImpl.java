@@ -26,13 +26,14 @@ public class TagServiceImpl implements ITagService {
 
         List<Tag> info = tagMapper.checkTagNameUnique(tagName);
 
-        if(info != null) {
+        if(!info.isEmpty()) {
             return false;
         }
         return true;
     }
 
     @Override
+    @Transactional
     public int insertTag(List<Tag> tag) {
         int rows = tagMapper.insertTag(tag);
 
