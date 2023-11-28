@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,11 +24,11 @@ public class TagController extends BaseController {
         return success(list);
     }
 
-    @PostMapping
-    public AjaxResult add(@Validated @RequestBody List<String> tagName) {
-        if(!tagService.checkTagNameUnique(tagName)) {
+    @PostMapping(value="addTag")
+    public AjaxResult add(@Validated @RequestBody List<Tag> tag) {
+        if(!tagService.checkTagNameUnique(tag)) {
             return error("标签有重复的");
         }
-        return toAjax(tagService.insertTag(tagName));
+        return toAjax(tagService.insertTag(tag));
     }
 }

@@ -11,7 +11,7 @@
     <el-row>
       <el-tag
         class="button-tag"
-        :key="tag.tagId"
+        :key="tag.vKey"
         v-for="tag in dynamicTags"
         closable
         @close="handleCloseTag(tag.tagId)"
@@ -85,7 +85,7 @@ export default {
   methods: {
     initTagList() {
       listTags().then(res => {
-        this.dynamicTags = res.data.map(item => ({ tagId: item.tagId, tagName: item.tagName }));
+        this.dynamicTags = res.data.map(item => ({ vKey: item.tagId, tagId: item.tagId, tagName: item.tagName }));
       })
     },
     handleCloseTag(tag) {
@@ -139,11 +139,11 @@ export default {
         }else {
           // 临时加到dynamicTags里面
           const newTag = {
-            tagId: this.generateUniqueId(),
+            vKey: this.generateUniqueId(),
             tagName: inputValue
           }
           this.dynamicTags.push(newTag);
-          this.tempTags.push(inputValue)
+          this.tempTags.push(newTag)
         }
       }
       this.inputVisible = false

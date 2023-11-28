@@ -9,7 +9,7 @@ export function listTags() {
 
 export function addTag(data) {
   return request({
-    url: 'taskList/tag',
+    url: 'taskList/tag/addTag',
     method: 'post',
     data: data
   })

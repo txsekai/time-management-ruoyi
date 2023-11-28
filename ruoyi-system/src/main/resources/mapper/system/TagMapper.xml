@@ -27,11 +27,11 @@
         </foreach>
     </select>
 
-    <insert id="insertTag" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="tagId">
+    <insert id="insertTag" useGeneratedKeys="true" keyProperty="tagId">
             insert into tag (tag_name)
             values
-        <foreach collection="list" item="tagName" separator=",">
-                (#{tagName})
+        <foreach collection="list" item="tag" separator=",">
+                (#{tag.tagName})
         </foreach>
     </insert>
 </mapper>
