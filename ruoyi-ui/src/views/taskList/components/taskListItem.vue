@@ -142,7 +142,7 @@ export default {
   watch: {
     todoList(val) {
       for (let row of val) {
-        row.dateAndTime = {startTime: row.taskStartTime, completedTime: row.taskCompletedTime};
+        row.dateAndTime = {startTime: new Date(row.taskStartTime), completedTime: new Date(row.taskCompletedTime)};
         if (row.tags.length > 0) {
           row.tags = row.tags.map((tagRow)=>{
             return{tagId: tagRow.tagId, tagName: tagRow.tagData.tagName}
@@ -187,7 +187,13 @@ export default {
       this.currentTask = task
 
       this.$nextTick(() => {
-        document.getElementById('task_input_' + index).focus()
+        // document.getElementById('task_input_' + index).focus()
+        setTimeout(() => {
+          const inputElement = document.getElementById('task_input_' + index);
+          if (inputElement) {
+            inputElement.focus();
+          }
+        }, 300);
       });
     },
     inputBlur(task, index) {
