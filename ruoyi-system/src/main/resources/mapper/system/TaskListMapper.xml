@@ -22,7 +22,7 @@
         <collection property="tags" javaType="java.util.List" resultMap="TaskTagsResult" />
     </resultMap>
 
-    <resultMap id="RepeatResult" type="TaskRepeat">
+    <resultMap id="RepeatResult" type="com.ruoyi.taskList.domain.entity.TaskRepeat">
         <id property="taskRepeatId" column="task_repeat_id" />
         <result property="repeatValue" column="repeat_value" />
         <result property="endRepeat" column="end_repeat" />

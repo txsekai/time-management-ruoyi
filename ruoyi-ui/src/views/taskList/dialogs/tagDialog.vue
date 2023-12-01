@@ -10,13 +10,13 @@
   >
     <el-row>
       <el-tag
-        class="button-tag"
+        class="button-tag user-select-none"
         :key="tag.vKey"
         v-for="tag in dynamicTags"
         closable
         @close="handleCloseTag(tag)"
         @click="handleSelectOrCancelTag(tag)"
-        :class="{selected: isSelected(tag.tagId)}"
+        :class="{selected: isSelected(tag.vKey)}"
       >{{ tag.tagName }}
       </el-tag>
       <el-input
@@ -64,7 +64,7 @@ export default {
     return {
       dynamicTags: [],
       inputVisible: false,
-      inputValue: [],
+      inputValue: '',
       tempTags: [],
       tempSelectTagIds: [],
       tempDeselectTagIds: [],
@@ -76,91 +76,19 @@ export default {
   },
 
   computed: {
-    isSelected() {
-      // return tag => this.task.tags.includes(tag)
-      const tagIds = this.task.tags.map(tag => tag.tagId);
-      return tagId => tagIds.includes(tagId) || this.tempSelectTagIds.includes(tagId);
-    },
+
   },
 
   methods: {
+    isSelected(tagVKey) {
+      const tagIds = this.task.tags.map(tag => tag.tagId);
+      return tagIds.includes(tagVKey) || this.tempSelectTagIds.includes(tagVKey);
+    },
     getTagList() {
       listTags().then(res => {
         this.dynamicTags = res.data.map(item => ({vKey: item.tagId, tagId: item.tagId, tagName: item.tagName}));
       })
-    },
-    handleCloseTag(tag) {
-      // this.$modal.confirm('是否确认删除标签: "' + tag.tagName + '"?')
-      this.$modal.confirm('是否确认删除标签: ' + tag.tagName + '?').then(function () {
-        return delTag(tag.tagId);
-      }).then(() => {
-        this.getTagList();
-        this.$modal.msgSuccess("删除成功");
-
-        //   TODO 查看删除的是否已选择,选择的话要删除关联
-      }).catch(() => {
-      });
-
-
-      // this.$confirm("确认要删除标签吗？", "确认", {
-      //   confirmButtonText: "确认",
-      //   cancelButtonText: "取消",
-      //   type: "warning"
-      // }).then(() => {
-      //   delTag(tag.tagId).then(res => {
-      //     this.$modal.msgSuccess("删除成功")
-      //   })
-      //
-      //   this.dynamicTags.splice(this.dynamicTags.indexOf(tag.tagId), 1)
-      //   if(this.task.tags.includes(tag.tagId)) {
-      //     this.deselectTag(tag.tagId)
-      //   }
-      //
-      //   if(this.tagsBk.includes(tag.tagId)) {
-      //     const index = this.tagsBk.indexOf(tag.tagId)
-      //     if (index !== -1) {
-      //       this.tagsBk.splice(index, 1)
-      //     }
-      //   }
-      // }).catch(() => {})
-    },
-    handleSelectOrCancelTag(tag) {
-      debugger
-      if (this.isSelected(tag.tagId)) {
-        this.deselectTag(tag.tagId)
-      } else {
-        this.selectTag(tag.tagId)
-      }
-    },
-    selectTag(tagId) {
-      debugger
-      const tagIds = this.task.tags.map(tag => tag.tagId);
-
-      if (!tagIds.includes(tagId)) {
-        // this.task.tags.push(tag);
-        this.tempSelectTagIds.push(tagId);
-      }
-    },
-    deselectTag(tagId) {
-      // const index = this.task.tags.indexOf(tag)
-      // if (index !== -1) {
-      //   this.task.tags.splice(index, 1)
-      // }
-
-
-      // 要取消选择的tag在临时tempSelectTagIds里面
-      const index = this.tempSelectTagIds.indexOf(tagId);
-      if(index !== -1) {
-        this.tempSelectTagIds.splice(index, 1);
-      }else {
-        // 要取消选择的tag在task.tags里面(在数据库中)
-        const tagIds = this.task.tags.map(tag => tag.tagId);
-        if(tagIds.includes(tagId)) {
-          this.tempDeselectTagIds.push(tagId);
-        }
-      }
-    },
-    generateUniqueId() {
+    },generateUniqueId() {
       return uuidv4();
     },
     handleInputConfirm() {
@@ -190,13 +118,72 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
+    handleCloseTag(tag) {
+      this.$confirm("确认要删除标签吗？", "确认", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        const tempIndex = this.tempTags.findIndex(tempTag => tempTag.vKey === tag.vKey);
+        if(tempIndex !== -1) {
+          this.tempTags.splice(tempIndex , 1);
+          const dynamicIndex = this.dynamicTags.findIndex(dynamicTag => dynamicTag.vKey === tag.vKey);
+          this.dynamicTags.splice(dynamicIndex, 1)
+        }else {
+          delTag(tag.tagId).then(res => {
+            this.$modal.msgSuccess("删除成功")
+            this.getTagList();
+          })
+        }
+
+        // this.dynamicTags.splice(this.dynamicTags.indexOf(tag.tagId), 1)
+        // if(this.task.tags.includes(tag.tagId)) {
+        //   this.deselectTag(tag.tagId)
+        // }
+        //
+        // if(this.tagsBk.includes(tag.tagId)) {
+        //   const index = this.tagsBk.indexOf(tag.tagId)
+        //   if (index !== -1) {
+        //     this.tagsBk.splice(index, 1)
+        //   }
+        // }
+      }).catch(() => {})
+    },
+    handleSelectOrCancelTag(tag) {
+      if (this.isSelected(tag.vKey)) {
+        this.deselectTag(tag.vKey)
+      } else {
+        this.selectTag(tag.vKey)
+      }
+    },
+    selectTag(tagVKey) {
+      const tagIds = this.task.tags.map(tag => tag.tagId);
+
+      if (!tagIds.includes(tagVKey)) {
+        this.tempSelectTagIds.push(tagVKey);
+      }
+    },
+    deselectTag(tagVKey) {
+      // 要取消选择的tag在临时tempSelectTagIds里面
+      const index = this.tempSelectTagIds.indexOf(tagVKey);
+      if(index !== -1) {
+        this.tempSelectTagIds.splice(index, 1);
+      }else {
+        // 要取消选择的tag在task.tags里面(在数据库中)
+        const tagIds = this.task.tags.map(tag => tag.tagId);
+        if(tagIds.includes(tagVKey)) {
+          this.tempDeselectTagIds.push(tagVKey);
+        }
+      }
+    },
     handleConfirm() {
+      debugger
       if (this.tempTags.length > 0) {
         addTag(this.tempTags).then(res => {
           this.$modal.msgSuccess("新增标签成功")
         })
       }
-      debugger
+
       if(this.tempSelectTagIds.length > 0) {
         selectTagToTask(this.task.taskId, this.tempSelectTagIds).then(res => {
           this.$modal.msgSuccess("选择标签成功")
